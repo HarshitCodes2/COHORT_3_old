@@ -1,0 +1,105 @@
+body{
+    background-color: #131313;
+    color: #f0f0f0;
+    font-family: "Inter", sans-serif;
+    font-weight: 200;
+}
+
+h1{
+    font-size: 53px;
+}
+
+.section{
+    margin-bottom: 80px;
+}
+
+.container{
+    max-width: 80vw;
+    margin: auto;
+}
+
+.flex-nav-bar{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-list a{
+    color: #bebdbd;
+    text-decoration: none;
+}
+
+a h2{
+    color: #f0f0f0;
+}
+
+.left-side{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+}
+
+.right-side{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.right-side button{
+    background-color: #0078d3;
+    border: 0 white;
+    border-radius: 3px;
+    color: #f0f0f0;
+    font-size: 16px;
+    padding: 9px;
+    width:fit-content ;
+}
+
+.right-side input{
+    background-color: #131313;
+    border: solid 0.5px rgb(163, 163, 163);
+    padding: 5px;
+    border-radius: 2px;
+}
+
+.nav-list{
+    margin: 0px 20px;
+}
+
+.parent-flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.child-flex-l{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 70%;
+    font-size: 11px;
+}
+
+.child-flex-l button{
+    background-color: #0078d3;
+    border: 0 white;
+    border-radius: 3px;
+    color: #f0f0f0;
+    font-size: 18px;
+    padding: 15px;
+    width:fit-content ;
+}
+
+.header-btn{
+    width: 50%;
+}
+
+.child-flex-r{
+    align-items:flex-end;
+}
+
+
+
