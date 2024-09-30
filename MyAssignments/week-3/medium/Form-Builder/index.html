@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormBuilder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="formApp" >
+        <div id="formBuilder">
+            <h2>Form Builder</h2>
+            <form id="formBuilderForm" action="">
+                <div id="dropdownDiv">
+                    <label>Select Field Type</label><br>
+                    <select id="inpSelect">
+                        <option value="checkbox">Checkbox Input</option>
+                        <option value="radio">Radio Input</option>
+                        <option value="text">Text Input</option>
+                    </select>
+                </div>
+                <div id="labelDiv">
+                    <label>Field Label</label><br>
+                    <input type="text" name="" id="inpLabel" placeholder="Enter field label">
+                </div>
+                <!-- <input id="submitBtn" type="submit" value="Add Field"/> -->
+                 <button id="submitBtn" onclick="addFormEl()">Add Field</button>
+          </form>
+        </div>
+        <div id="formPreview">
+            <h2>Form Preview</h2>
+            <form id="builtForm" action="">
+                <!-- <div id="formDivCr">
+                    <label>Alphadsadd</label>
+                    <input type="text">
+                </div>
+                <div id="formDivCr">
+                    <label>Alpha</label>
+                    <input type="checkbox">
+                </div>
+                <div id="formDivCr">
+                    <label>Alphasdads</label>
+                    <input type="radio">
+                </div> -->
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
