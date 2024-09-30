@@ -1,6 +1,6 @@
 let n = 0;
 
-function btnClick(){
+function addTodo(){
     let inp = document.getElementById("todo-ip");
     let val = inp.value;
     let elem = document.createElement("div");
