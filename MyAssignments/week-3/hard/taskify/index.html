@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo-App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Form PopUp Start -->
+    <div class="popUpFormDiv hidden">
+        <h2>
+            Enter Values:
+        </h2>
+        <form action="" id="todoForm">
+            <div class="formLeft">
+                <label>Task Name :</label>
+                <label>Task Description :</label>
+                <label>Task Priority :</label>
+            </div>
+
+            <div class="formRight">
+                <input type="text" name="heading" id="taskHead">
+                <input type="text" name="subHeading" id="taskSubHead">
+                <select name="priority" id="taskPriority">
+                    <option value="green">Low</option>
+                    <option value="yellow">Medium</option>
+                    <option value="red">High</option>
+                </select>
+            </div>
+        </form>
+        <button class="formButton" onclick="addCard()">Submit</button>
+    </div>
+
+    <!-- Form PopUp End -->
+
+    <div class="todo-section">
+        <div class="container left">
+            <div class="heading">
+                <p>
+                    To Do
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            <!-- Trial Static Cards -->
+            <div class="card red" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Grocery Shopping</p>
+                    <p class="cardSubHeading">Buy weekly groceries</p>
+                </div>
+                <div class="status">
+                    <p class="priority red">
+                        High
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <div class="card yellow" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Workout</p>
+                    <p class="cardSubHeading">Morning exercise routine</p>
+                </div>
+                <div class="status">
+                    <p class="priority yellow">
+                        Medium
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <div class="card green" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Project Meeting</p>
+                    <p class="cardSubHeading">Discuss project milestones</p>
+                </div>
+                <div class="status">
+                    <p class="priority green">
+                        Low
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <button id="containerBtn" class="addTodoBtn" onclick="addTodo()">
+                <p>Add new</p>
+                <p>+</p>
+            </button>
+        </div>
+        <div class="container">
+            <div class="heading">
+                <p>
+                    In Progress
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            <!-- Trial Static Cards -->
+            <div class="card yellow" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Doctor Appointment</p>
+                    <p class="cardSubHeading">Annual health check-up</p>
+                </div>
+                <div class="status">
+                    <p class="priority yellow">
+                        Medium
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <div class="card green" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Laundry</p>
+                    <p class="cardSubHeading">Wash and fold clothes</p>
+                </div>
+                <div class="status">
+                    <p class="priority green">
+                        Low
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="heading">
+                <p>
+                    Under Review
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            <!-- Trial Static Cards -->
+            <div class="card green" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Client Call</p>
+                    <p class="cardSubHeading">Monthly review call with client</p>
+                </div>
+                <div class="status">
+                    <p class="priority green">
+                        Low
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <div class="card red" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Read Book</p>
+                    <p class="cardSubHeading">Finish reading 'Atomic Habits'</p>
+                </div>
+                <div class="status">
+                    <p class="priority red">
+                        High
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <div class="card yellow" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Dinner with Friends</p>
+                    <p class="cardSubHeading">Catch up with old friends</p>
+                </div>
+                <div class="status">
+                    <p class="priority yellow">
+                        Medium
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="container right">
+            <div class="heading">
+                <p>
+                    Finished
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            <!-- Trial Static Cards -->
+            <div class="card green" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Write Blog Post</p>
+                    <p class="cardSubHeading">Draft new blog post on productivity</p>
+                </div>
+                <div class="status">
+                    <p class="priority green">
+                        Low
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <div class="card yellow" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Gardening</p>
+                    <p class="cardSubHeading">Plant new flowers in the garden</p>
+                </div>
+                <div class="status">
+                    <p class="priority yellow">
+                        Medium
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+            <div class="card red" draggable="true">
+                <div class="head">
+                    <p class="cardHeading">Car Maintenance</p>
+                    <p class="cardSubHeading">Oil change and tire rotation</p>
+                </div>
+                <div class="status">
+                    <p class="priority red">
+                        High
+                    </p>
+                    <div class="dateCreated">
+                        <img src="images/query_builder_24px_rounded.svg" alt="">
+                        <p>Oct 1, 2024</p>
+                    </div>
+                    <p class="time">
+                        1 hr ago
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+    <script src="script.js"></script>
+</html>
