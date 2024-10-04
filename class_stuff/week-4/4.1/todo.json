@@ -1,0 +1,10 @@
+[
+  {
+    "todoName": "Task-1",
+    "status": "complete"
+  },
+  {
+    "todoName": "Task-3",
+    "status": "pending"
+  }
+]
