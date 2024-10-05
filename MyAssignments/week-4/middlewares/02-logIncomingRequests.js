@@ -5,6 +5,12 @@ const app = express();
 
 function logRequests(req, res, next) {
     // write the logic for request log here
+    let date = new Date();
+    // console.log(req.method);
+    console.log(`${req.method} / - ${date.toISOString()}`);
+
+    next();
+    
 }
 
 app.use(logRequests);
@@ -14,3 +20,5 @@ app.get('/', (req, res) => {
 });
 
 module.exports = app;
+
+app.listen(3000);
