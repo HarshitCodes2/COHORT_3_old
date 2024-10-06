@@ -7,7 +7,7 @@ function logRequests(req, res, next) {
     // write the logic for request log here
     let date = new Date();
     // console.log(req.method);
-    console.log(`${req.method} / - ${date.toISOString()}`);
+    console.log(`${req.method} ${req.path} - ${date.toISOString()}`);
 
     next();
     
