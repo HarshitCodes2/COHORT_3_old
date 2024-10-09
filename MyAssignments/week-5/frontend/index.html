@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo-App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+</head>
+<body>
+    <!-- Form PopUp Start -->
+    <div class="popUpFormDiv hidden">
+        <div id="crossformBtn">
+            <button id="closeBtn" onclick="resetForm()">
+                X
+            </button>
+        </div>
+        <h2>
+            Enter Values:
+        </h2>
+        <form action="" id="todoForm">
+            <div class="formLeft">
+                <label>Task Name :</label>
+                <label>Task Description :</label>
+                <label>Task Priority :</label>
+            </div>
+
+            <div class="formRight">
+                <input type="text" name="heading" id="taskHead">
+                <input type="text" name="subHeading" id="taskSubHead">
+                <select name="priority" id="taskPriority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+        </form>
+        <button class="formButton" onclick="addTaskToState()">Submit</button>
+    </div>
+
+    <!-- Form PopUp End -->
+    <div id="navbar">
+        <div id="navIcon">
+            <img id="icon" src="images/TASKIFY.svg" alt="" />
+        </div>
+        <div id="btnDiv">
+            <button id="navBtn" class="addTodoBtn" onclick="showTodoForm()">
+                <p>Add new</p>
+                <p>+</p>
+            </button>
+        </div>
+    </div>
+    <div class="todo-section">
+        <div id="con-1" class="container left">
+            <div class="heading">
+                <p>
+                    To Do
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            
+            
+        </div>
+        <div id="con-2" class="container">
+            <div class="heading">
+                <p>
+                    In Progress
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            
+        </div>
+        <div id="con-3" class="container">
+            <div class="heading">
+                <p>
+                    Under Review
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            
+        </div>
+        <div id="con-4" class="container right">
+            <div class="heading">
+                <p>
+                    Finished
+                </p>
+                <div class="iconContainer">
+                    <img src="images/menu2_24px.svg" alt="">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+
+    <script src="script.js"></script>
+</html>
