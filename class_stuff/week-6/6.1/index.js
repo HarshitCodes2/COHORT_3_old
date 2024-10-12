@@ -7,6 +7,28 @@ app.use(express.json());
 
 let users = [];
 
+function authenticateUser(req, res, next){
+    const token = req.headers.token;
+
+    if(token){
+        const decodedUser = jwt.verify(token, JWT_SECRET);
+
+        for(let user of users){
+            if(user.username == decodedUser.username){
+                // res.json({
+                //     username : user.username
+                // });
+                req.user = user;
+                next();
+            }
+        }
+    }else{
+        res.json({
+            message : "User not Logged in"
+        });
+    }
+}
+
 app.post("/signup", function(req, res) {
 
    const username = req.body.username;
@@ -56,28 +78,36 @@ app.post("/signin", function(req, res) {
 });
 
 
-app.get("/me", function (req, res){
-   const token = req.headers.token;
-   const decodedUser = jwt.verify(token, JWT_SECRET);
+app.get("/me", authenticateUser, function (req, res){
+//    const token = req.headers.token;
+//    const decodedUser = jwt.verify(token, JWT_SECRET);
    
-   let foundUser;
+//    let foundUser;
    
-   for(let user of users){
-      if(decodedUser.username == user.username){
-         foundUser = user;
-      }
-   }
+//    for(let user of users){
+//       if(decodedUser.username == user.username){
+//          foundUser = user;
+//       }
+//    }
 
-   if(foundUser){
-      res.json({
-         username : foundUser.username,
-         password : foundUser.password
-      })
-   }else{
-      res.json({
-         message : "Incorrect Token"
-      })
-   }
+//    if(foundUser){
+//       res.json({
+//          username : foundUser.username,
+//          password : foundUser.password
+//       })
+//    }else{
+//       res.json({
+//          message : "Incorrect Token"
+//       })
+//    }
+
+    const authenticatedUser = req.user;
+
+
+    res.json({
+        message : "User is authenticated",
+        user : authenticatedUser
+    });
 })
 
 

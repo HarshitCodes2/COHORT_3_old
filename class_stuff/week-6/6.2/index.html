@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function signup(){
+            const username_inp = document.querySelector('#signup-username');
+            const password_inp = document.querySelector('#signup-password');
+
+            const username = username_inp.value;
+            const password = password_inp.value;
+
+            await axios.post("http://localhost:3000/signup", {
+                username : username,
+                password : password
+            });
+            
+        }
+        async function signin(){
+            const username_inp = document.querySelector('#signin-username');
+            const password_inp = document.querySelector('#signin-password');
+
+            const username = username_inp.value;
+            const password = password_inp.value;
+
+            const response = await axios.post("http://localhost:3000/signin",{
+                username : username,
+                password : password
+            });
+
+            // console.log(response);
+
+            if(response.data.message == "Incorrect"){
+                alert("Incorrect Info");
+                return;
+            }
+            
+            localStorage.setItem("token", response.data.token);
+
+        }
+        async function populateData(){
+            const token = localStorage.getItem("token");
+
+            const info = await axios.get("http://localhost:3000/get_info", {
+                headers : {
+                    token : token
+                }
+            })
+
+            const infoPara = document.querySelector('#user-info');
+            
+            infoPara.innerHTML = info.data.username;
+        }
+
+        function logout(){
+            localStorage.removeItem("token");
+            alert("You have been logged out");
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <input type="text" name="" id="signup-username">
+        <input type="text" name="" id="signup-password">
+        <button type="submit" onclick="signup()">Sign Up</button>
+    </div>
+    <div>
+        <input type="text" name="" id="signin-username">
+        <input type="text" name="" id="signin-password">
+        <button type="submit" onclick="signin()">Sign In</button>
+    </div>
+    <div>
+        <p>User Information</p>
+        <p id="user-info"></p>
+        <button type="submit" onclick="populateData()">Pop Data</button>
+        <button type="submit" onclick="logout()">Logout</button>
+    </div>
+</body>
+</html>
