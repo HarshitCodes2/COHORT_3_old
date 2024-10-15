@@ -10,7 +10,7 @@ const SALTROUNDS = 10;
 
 async function dbConnect() {
     try {
-        await mongoose.connect("mongodb+srv://Harshit:BJyBHhTx2PZAHI7J@cluster0.n97ou.mongodb.net/todo-app-database");
+        await mongoose.connect("mongodb+srv://<username>:<dbpassword>@cluster0.n97ou.mongodb.net/todo-app-database");
         console.log("Connected to MongoDB");
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
