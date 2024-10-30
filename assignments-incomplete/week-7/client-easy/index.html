@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Level Up</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- write your code here -->
@@ -15,46 +16,77 @@
     <div class="navbar-section">
         <div class="navbar-container">
             <div class="navbar">
-                <h1 id="navbar-name">LEVEL UP</h1>
-                <button id="navbar-btn">Sign in</button>
+                <h1 id="navbar-name" onclick="history.go(0)">LEVEL UP</h1>
+                <button id="navbar-btn" class="hidden"></button>
             </div>
         </div>
     </div>
- 
+
     <div class="main-section">
         <div class="main-container">
+
+            <div class="add-course-form hidden" id="add-course-form">
+                <h1 class="form-heading">Add Course Details <button class="form-close-btn" onclick="closeAddForm()"><img src="./icon/navigation/cancel_24px.svg" alt="" srcset=""></button></h1>
+                <input type="text" name="" id="course-name" class="form-input" placeholder="Course Name">
+                <textarea type="text" name="" id="course-desc" class="form-input large-input" placeholder="Course Description"></textarea>
+                <input type="text" name="" id="course-price" class="form-input" placeholder="Course Price">
+                <input type="text" name="" id="course-img-url" class="form-input" placeholder="Course Image URL">
+                <button id="form-btn" onclick="addCourse()">Submit</button>
+            </div>
+                
+            <div class="edit-course-form hidden" id="edit-course-form">
+                <h1 class="form-heading">Edit Course Details <button class="form-close-btn" onclick="closeEditForm()"><img src="./icon/navigation/cancel_24px.svg" alt="" srcset=""></button></h1>
+                <input type="text" name="" id="course-name-edit" class="form-input" placeholder="Course Name">
+                <textarea type="text" name="" id="course-desc-edit" class="form-input large-input" placeholder="Course Description"></textarea>
+                <input type="text" name="" id="course-price-edit" class="form-input" placeholder="Course Price">
+                <input type="text" name="" id="course-img-url-edit" class="form-input" placeholder="Course Image URL">
+                <input type="text" name="" class="hidden" id="course-id">
+                <button id="form-btn" onclick="editCourse()">Submit</button>
+            </div>
+
             <div class="content-div">
+            
+                <button class="start-options" onclick="loadAdminSignup()">ADMIN</button>
+                <button class="start-options" onclick="loadUserSignup()">USER</button>
+            
+
                 <!-- Sign Up and Sign In Page BEGIN -->
 
                 <!-- <img src="images/daniela-e-U5CkO8iEl9I-unsplash-min.jpg" alt="" id="sign-form-img">
                 <div id="sign-form">
                     <h2 id="sign-heading">SIGN UP - ADMIN</h2>
-                    <input type="text" name="FullName" class="form-input" id="sign-fullname" placeholder="Full Name"/>
-                    <input type="email" name="Email" class="form-input" id="sign-email" placeholder="Email"/>
-                    <input type="password" name="Password" class="form-input" id="sign-password" placeholder="Password"/>
-                    <button id="form-btn">Sign Up</button>
+                    <input type="text" class="form-input" id="sign-fullname" placeholder="Full Name"/>
+                    <input type="email" class="form-input" id="sign-email" placeholder="Email"/>
+                    <input type="password" class="form-input" id="sign-password" placeholder="Password"/>
+                    <button id="form-btn" onclick="adminSignup()">Sign Up</button>
                 </div> -->
 
                 <!-- Sign Up and Sign In Page END -->
 
 
                 <!-- Courses Page BEGIN -->
-
+<!--                 
                 <div id="courses-div">
                     <div class="courses-head-div">
                         <h1 class="courses-heading">Courses</h1>
-                        <button class="add-course-btn">Add Course</button>
+                        <button class="add-course-btn" onclick="addCourseForm()">Add Course </button>
+                    </div>
+
+                    <div class="courses-head-div">
+                        <h1 class="courses-heading">Courses</h1>
+                        <button class="add-course-btn" onclick="loadBoughtCourses()">View Purchased Courses </button>
                     </div>
 
                     <div class="course-cards-div">
-                        <div class="course-card" id="course-card-1">
-                            <img src="images/javier-grixo-p1opmw12wvk-unsplash-min.jpg" alt="" class="card-img" id="course-img-1">
+                        <div class="course-card">
+                            <img src="images/javier-grixo-p1opmw12wvk-unsplash-min.jpg" alt="" class="card-img">
                             <div class="card-info-div">
-                                <h3 class="card-heading" id="card-head-1">Chess 101</h3>
-                                <p class="card-desc" id="card-desc-1">We will talk about some things related to Chess and how to get good at Chess an master Chess and get good at Chess, some Chess are very good.</p>
+                                <h3 class="card-heading">Chess 101</h3>
+                                <h4 class="author">Harshit Gupta</h4>
+                                <p class="card-desc">We will talk about some things related to Chess and how to get good at Chess an master Chess and get good at Chess, some Chess are very good.</p>
                                 <div class="card-cta">
-                                    <p class="course-price" id="course-price-1">4533 Rs.</p>
-                                    <button class="course-cta" onclick="buyCourse(1)">Buy Now</button>
+                                    <p class="course-price">4533 Rs.</p>
+                                    <button class="course-cta" onclick="editCourse(1)">Buy Now</button>
                                 </div>
                             </div>
                         </div>
@@ -62,6 +94,7 @@
                             <img src="images/sunder-muthukumaran-NeDudmvV64A-unsplash-min.jpg" alt="" class="card-img" id="course-img-1">
                             <div class="card-info-div">
                                 <h3 class="card-heading" id="card-head-1">Rendering Illustrations</h3>
+                                <h4 class="author">Anika Jain</h4>
                                 <p class="card-desc" id="card-desc-1">We will talk about some things related to Chess and how to get good at Chess an master Chess and get good at Chess, some Chess are very good.</p>
                                 <div class="card-cta">
                                     <p class="course-price" id="course-price-1">4533 Rs.</p>
@@ -73,6 +106,7 @@
                             <img src="images/sujoy-paul-idEZdAaEIc8-unsplash-min.jpg" alt="" class="card-img" id="course-img-1">
                             <div class="card-info-div">
                                 <h3 class="card-heading" id="card-head-1">Plant Biology</h3>
+                                <h4 class="author">Jigyasa Ma'am</h4>
                                 <p class="card-desc" id="card-desc-1">We will talk about some things related to Chess and how to get good at Chess an master Chess and get good at Chess, some Chess are very good.</p>
                                 <div class="card-cta">
                                     <p class="course-price" id="course-price-1">4533 Rs.</p>
@@ -83,7 +117,8 @@
                         <div class="course-card" id="course-card-1">
                             <img src="images/henry-be-TCsCykbwSJw-unsplash-min.jpg" alt="" class="card-img" id="course-img-1">
                             <div class="card-info-div">
-                                <h3 class="card-heading" id="card-head-1">History of the kingdom</h3>
+                                <h3 class="card-heading" id="card-head-1">History of the Kingdom</h3>
+                                <h4 class="author">Samkit Jain</h4>
                                 <p class="card-desc" id="card-desc-1">We will talk about some things related to Chess and how to get good at Chess an master Chess and get good at Chess, some Chess are very good.</p>
                                 <div class="card-cta">
                                     <p class="course-price" id="course-price-1">4533 Rs.</p>
@@ -95,6 +130,7 @@
                             <img src="images/javier-grixo-p1opmw12wvk-unsplash-min.jpg" alt="" class="card-img" id="course-img-1">
                             <div class="card-info-div">
                                 <h3 class="card-heading" id="card-head-1">Chess 101</h3>
+                                <h4 class="author">R D Dixit</h4>
                                 <p class="card-desc" id="card-desc-1">We will talk about some things related to Chess and how to get good at Chess an master Chess and get good at Chess, some Chess are very good.</p>
                                 <div class="card-cta">
                                     <p class="course-price" id="course-price-1">4533 Rs.</p>
@@ -103,7 +139,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
+                -->
                 <!-- Courses Page END -->
 
             </div>

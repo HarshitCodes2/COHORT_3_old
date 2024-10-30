@@ -1,15 +1,20 @@
-let a = 2;
+const express = require('express');
 
-try{
-    console.log("Blah Blah Blah 1");
-    
-    if (a == 1){
-        throw("a = 1");
-    }
-    console.log("Blah Blah Blah 2");
-    
-}catch(e){
-    console.log(e);
-}
+const app = express();
+const port = 3000;
 
-console.log("Blah Blah 3");
+// Middleware
+app.use(express.json());
+
+// Routes
+app.get('/getval/:a', (req, res) => {
+    
+    console.log(req.params);
+    res.send('Hello World!');
+});
+
+// Start server
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
+

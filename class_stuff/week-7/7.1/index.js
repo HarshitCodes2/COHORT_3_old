@@ -10,7 +10,7 @@ const SALTROUNDS = 10;
 
 async function dbConnect() {
     try {
-        await mongoose.connect("mongodb+srv://<username>:<dbpassword>@cluster0.n97ou.mongodb.net/todo-app-database");
+        await mongoose.connect("mongodb+srv://Harshit:BJyBHhTx2PZAHI7J@cluster0.n97ou.mongodb.net/todo-app-database");
         console.log("Connected to MongoDB");
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
@@ -82,7 +82,7 @@ app.post("/signin", async function(req, res){
 
     const user = await UserModel.findOne({
         email: email
-    })
+    });
 
     const hashedPassword = user.password;
 
@@ -130,11 +130,18 @@ app.post("/todos", auth, async function(req, res){
 app.get("/todos", auth, async function(req, res){
     const userId = req.userId;
 
-    const todos = await TodoModel.find({
-        userId: userId
-    });
 
-    console.log(todos);
+    // I looped over all the todo belonging to all user by keeping arguments in .find() empty
+
+    const todos = await TodoModel.find();
+    
+    let counter = 1;
+    for (let todo of todos){
+        console.log(counter);
+        console.log(todo);
+        counter++;
+    }
+
     
     res.json({
         message: "Retrieval Success",

@@ -24,6 +24,29 @@
     src: url("fonts/SolidenTrial-Regular.ttf");
 }
 
+/* width */
+::-webkit-scrollbar {
+    border-radius: 5px;
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    cursor: grab;
+}
+
 
 body{
     margin: 0px;
@@ -59,6 +82,7 @@ h1{
     font-size: 50px;
     position: relative;
     top: 7px;
+    cursor: pointer;
 }
 
 #navbar-btn{
@@ -86,9 +110,63 @@ h1{
     max-width: 1056px;
 }
 
+.add-course-form{
+    position: fixed;
+    inset-area: center;
+    display: flex;
+    flex-direction: column;
+    width: 548px;
+    margin: auto;
+    border: 2px solid white;
+    padding: 30px;
+    background-color: #1b1b1b;
+    box-shadow: 0px 0px 25px rgb(103, 103, 103);
+    border-radius: 12px;
+    z-index: 10;
+}
+
+.edit-course-form{
+    position: fixed;
+    inset-area: center;
+    display: flex;
+    flex-direction: column;
+    width: 548px;
+    margin: auto;
+    border: 2px solid white;
+    padding: 30px;
+    background-color: #1b1b1b;
+    box-shadow: 0px 0px 25px rgb(103, 103, 103);
+    border-radius: 12px;
+    z-index: 10;
+}
+
+.form-heading{
+    margin: 0px auto;
+    margin-bottom: 35px;
+    font-family: "SolidenTrial-BoldExpanded";
+    font-size: 37px;
+}
+
+.form-close-btn{
+    position: relative;
+    left: 50px;
+    background-color: transparent;
+    border: 0px;
+}
+
 .content-div{
     display: flex;
     justify-content: space-between;
+}
+
+.start-options{
+    margin-top: 150px;
+    padding: 20px 60px;
+    font-family: "SolidenTrial-BoldExpanded";
+    font-size: 40px;
+    background-color: #fff;
+    border: 0px;
+    border-radius: 5px;
 }
 
 #sign-form-img{
@@ -107,7 +185,7 @@ h1{
 }
 
 #sign-heading{
-    margin: auto;
+    margin: 0px auto;
     margin-bottom: 45px;
     font-family: "SolidenTrial-BoldExpanded";
     font-size: 27px;
@@ -130,14 +208,22 @@ h1{
     color: rgb(197, 197, 197);
 }
 
+.large-input{
+    resize: none;
+    overflow: auto;
+    height: 10rem;
+}
+
 #form-btn{
     margin-top: 50px;
     padding: 22px 50px;
     font-family: "SolidenTrial-BoldExpanded";
+    color: black;
     font-size: 28px;
     background-color: #fff;
     border: 0px;
     border-radius: 5px;
+    text-align: center;
 }
 
 #form-btn:hover{
@@ -173,6 +259,18 @@ h1{
     font-size: 23px;
 }
 
+.bought-course-btn{
+    padding: 18px 36px;
+    font-family: "SolidenTrial-BoldExpanded";
+    font-size: 23px;
+}
+
+.all-course-btn{
+    padding: 18px 36px;
+    font-family: "SolidenTrial-BoldExpanded";
+    font-size: 23px;
+}
+
 .course-cards-div{
     margin-top: 60px;
     display: flex;
@@ -202,7 +300,16 @@ h1{
     font-family:  "MonumentExtended-Regular";
     font-size: 24px;
     letter-spacing: 1.5px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    line-height: 150%;
+}
+
+.author{
+    font-family: "SolidenTrial-BoldExpanded";
+    letter-spacing: 0.5px;
+    line-height: 150%;
+    margin: 5px 0px;
+    color: rgba(255, 255, 255, 0.601);
 }
 
 .card-desc{
@@ -231,4 +338,12 @@ h1{
     font-size: 26px;
     padding: 13px 23px;
     line-height: 30px;
+}
+
+button{
+    cursor: pointer;
+}
+
+.hidden{
+    display: none;
 }

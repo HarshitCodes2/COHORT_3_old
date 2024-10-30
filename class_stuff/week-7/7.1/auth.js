@@ -9,7 +9,7 @@ function auth(req, res, next){
     let decodedUser;
     try{
         decodedUser = jwt.verify(token, JWT_SECRET);
-        console.log(decodedUser);
+        // console.log(decodedUser);
         const userId = decodedUser.userId;
         req.userId = userId;
         next();    
