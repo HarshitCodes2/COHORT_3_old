@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import style from "./Timer.module.css"
-import { formatTime, calculateTime } from '../utils/auxiliaryFunctions';
+import { formatTime, calculateTime } from './utils/auxiliaryFunctions';
 
 const Timer = () => {
   // States to manage time, initial time, running status, and editing fields with values
@@ -12,7 +12,7 @@ const Timer = () => {
   // Effect to update the progress bar as time counts down
   useEffect(() => {
     const progress = initialTime > 0 ? ((initialTime - time) / initialTime) * 100 : 0;
-    document.documentElement.style.setProperty('--progress', `${progress}%`);
+    document.documentElement.style.setProperty('--progress', `${100 - progress}%`);
   }, [time, initialTime]);
 
   // Effect to handle timer countdown when it is running
@@ -20,6 +20,8 @@ const Timer = () => {
     let interval = null;
     if (isRunning && time > 0) {
       interval = setInterval(() => {
+        // console.log("Timer");
+        
         setTime((prevTime) => prevTime - 1); // Decrease time by 1 second
       }, 1000);
     } else if (time === 0) {
@@ -28,8 +30,8 @@ const Timer = () => {
     return () => {
       if (interval) clearInterval(interval); // Clear interval to prevent memory leaks
     };
-  }, [isRunning, time]);
-
+  }, [isRunning, time]); // Every time this useEffect is triggered the previous is cleared by the cleanup function
+  
   // Function to handle editing of time fields
   const handleEditField = (field) => {
 

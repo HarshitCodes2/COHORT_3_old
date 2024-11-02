@@ -40,7 +40,7 @@ const PetAdoptionForm = (props) => {
     const { petName, petType, breed, ownerName, email, phone } = inputs;
 
     // Perform form submission logic here
-    console.log("Form submitted with values:", { petName, petType, breed, ownerName, email, phone });
+    // console.log("Form submitted with values:", { petName, petType, breed, ownerName, email, phone });
     props.setPets([...props.pets,{
       key: props.petKey,
       petName: petName,
