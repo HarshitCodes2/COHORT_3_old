@@ -1,3 +1,9 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .app-bar {
   background-color: #3f98b5;
   color: white;
@@ -8,14 +14,19 @@
 }
 
 .app-bar h1 {
-  font-size: 1.25rem;
+  font-size: 3rem;
   font-weight: bold;
+}
+
+.app-bar h2 {
+  font-size: 2rem;
+  font-weight: 500;
 }
 
 .user-section {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 3rem;
 }
 
 .user-section button {
@@ -25,6 +36,7 @@
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
+  font-size: larger;
 }
 
 /* Login Form Styles */
@@ -33,7 +45,7 @@
   flex-direction: column;
   gap: 1rem;
   max-width: 300px;
-  margin: 0 auto;
+  margin: 100px auto;
 }
 
 .form-group {

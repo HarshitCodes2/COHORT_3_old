@@ -17,6 +17,6 @@ Create a React component that fetches random user data using the `https://random
 - Implement error handling and retry logic for failed requests.
 - Customize the number of users fetched per request.
 
-## Refecrence UI
+## Reference UI
 
 ![Image](https://utfs.io/f/A8JZzw0Laf9jyvMCIikuNmbLHSZhjdl15eEqAOaxiK6o7wRp)
