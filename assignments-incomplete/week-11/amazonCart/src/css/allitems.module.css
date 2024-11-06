@@ -50,6 +50,17 @@
   background-color: #f8cc6d41;
 }
 
+.activeIcons{
+  background-color: #f8cc6d41;
+  border: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 3px;
+  border: 1px solid transparent;  
+}
+
 .itemGrid{
   display: grid;
   row-gap: 40px;
@@ -104,6 +115,14 @@
   font-weight: bold;
 }
 
+.btnDivGrid .cardBtnTwo {
+  background-color: white;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid rgb(248, 197, 15);
+}
+
 .itemList{
   display: flex;
   flex-direction: column;
@@ -142,22 +161,48 @@
   width: 150px;
 }
 
+.btnDivList .cardBtnTwo {
+  background-color: white;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  width: 150px;
+  border: 2px solid rgb(248, 197, 15);
+}
+
 .cardBtn:hover{
   background-color: rgb(246, 204, 50);
   position: relative;
   bottom: 2px;
 }
 
-button{
-  border: 1px solid transparent;  
+.cardBtnTwo:hover{
+  background-color: rgb(227, 227, 227);
+  position: relative;
+  bottom: 2px;
 }
 
-.popupDiv{
+.popupnoDiv{
   position: fixed;
   align-items: center;
   width: 200px;
-  background-color: #fa9563e5;
-  padding: 40px;
+  background-color: #fa956345;
+  padding: 10px;
+  top:10%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 10;
+}
+
+.popupyesDiv{
+  position: fixed;
+  align-items: center;
+  width: 200px;
+  background-color: #7afa633c;
+  padding: 10px;
   top:10%;
   left: 50%;
   transform: translate(-50%, 0%);

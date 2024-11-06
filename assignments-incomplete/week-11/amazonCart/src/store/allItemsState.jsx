@@ -24,7 +24,7 @@ export const allItems = atom({
     },
     {
       id: 4,
-      imgUrl: "https://m.media-amazon.com/images/I/51W0opp83WL._SX679_.jpg",
+      imgUrl: "",
       name: "Whirlpool 184 L 2 Star Direct-Cool",
       price: 4232,
     },

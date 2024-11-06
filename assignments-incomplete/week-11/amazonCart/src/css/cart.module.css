@@ -185,3 +185,32 @@
   bottom: 2px;
 }
 
+.undoMsg{
+  position: fixed;
+  align-items: center;
+  background-color: #fff;
+  width: 200px;
+  padding: 10px 10px;
+  top:20%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 10;
+}
+
+.message{
+  font-family: "Breite Grotesk Regular";
+  font-size: 19px;
+  color: rgb(39, 0, 0);
+}
+
+.link{
+  background-color: transparent;
+  border: 1px solid transparent;
+  font-family: "Breite Grotesk Regular";
+  font-size: 19px;
+  color: rgb(7, 59, 170);
+}
+

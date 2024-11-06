@@ -6,8 +6,8 @@ export const layout = atom({
 })
 
 export const popUp = atom({
-  key: 'popUp',
-  default: false
+  key: 'popUpNoCart',
+  default: 'none' // nw, yw, nc, yc
 })
 
 export const purchaseDone = atom({
