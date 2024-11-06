@@ -5,12 +5,12 @@ export const layout = atom({
   default: 'grid'
 })
 
-// export const cartNotif = atom({
-//   key: 'cartNotif',
-//   default: 10
-// })
+export const popUp = atom({
+  key: 'popUp',
+  default: false
+})
 
-// export const wishlistNotif = atom({
-//   key: 'wishlistNotif',
-//   default: 2
-// })
+export const purchaseDone = atom({
+  key: 'purchaseDone',
+  default: false
+});

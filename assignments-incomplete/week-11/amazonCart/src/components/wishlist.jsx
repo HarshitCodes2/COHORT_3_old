@@ -2,16 +2,19 @@ import gridIcon from "../assets/icon/action/grid.svg";
 import listIcon from "../assets/icon/action/list.svg";
 import styles from "../css/wishlist.module.css";
 import placeholderImg from "../assets/images/ImagePlaceholder.jpg";
-import { layout } from "../store/behaviourState";
-import { RecoilRoot, useRecoilValue, useSetRecoilState } from "recoil";
+import { layout, popUp } from "../store/behaviourState";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { wishlistItems } from "../store/wishListItemsState";
+import { allItems } from "../store/allItemsState";
+import { cartItems } from "../store/cartItemsState";
 
 function WishListItems() {
+  const showPopup = useRecoilValue(popUp);
   return (
     <div className={styles.itemContainer}>
-      <RecoilRoot>
-        <SideBar />
-        <MainContent />
-      </RecoilRoot>
+      {showPopup ? <PopUp /> : <></>}
+      <SideBar />
+      <MainContent />
     </div>
   );
 }
@@ -50,13 +53,12 @@ function MainContent() {
 
 function Header() {
   const setLayout = useSetRecoilState(layout);
-  
+
   return (
     <div className={styles.header}>
       <h1 className={styles.heading}>Your Wishlist</h1>
       <p className={styles.subHeading}>The choice is aapki</p>
       <div className={styles.layoutBtns}>
-        {/* Add clicked style for when a button is selected and it stays that way */}
         <button onClick={() => setLayout("grid")} className={styles.iconBtns}>
           <img src={gridIcon} />
         </button>
@@ -69,63 +71,146 @@ function Header() {
 }
 
 function AllItemsGridContainer() {
+  const wishlistItemIds = useRecoilValue(wishlistItems);
+  const allItemsList = useRecoilValue(allItems);
+
+  const wishlistDetails = wishlistItemIds.map(id => allItemsList.find(item => item.id === id));
+  
   return (
     <div className={styles.itemGrid}>
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
-      <GridItemCard />
+      {wishlistDetails.map((item, index) => (
+        <GridItemCard
+          key={index}
+          id={item.id}
+          name={item.name}
+          price={item.price}
+          imgUrl={item.imgUrl}
+        />
+      ))}
     </div>
   );
 }
 
-function GridItemCard() {
+function GridItemCard(props) {
+  const [wishlistItemList, setWishlistItems] = useRecoilState(wishlistItems);
+  const [cartItemList, setCartItems] = useRecoilState(cartItems);
+  const setPopUp = useSetRecoilState(popUp);
+
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  }
+
+  const debouncedSetPopUp = debounce(() => setPopUp(false), 2000);
+
+  function removeFromWishlist(id) {
+    setWishlistItems(wishlistItemList.filter(itemId => itemId !== id));
+  }
+
+  function addToCart(id){
+    const alreadyExist = cartItemList.find((item) => item.id == id);
+    console.log(alreadyExist);
+    
+    if (alreadyExist) {
+      setPopUp(true);
+      debouncedSetPopUp();
+    } else {
+      removeFromWishlist(id);
+      setCartItems([...cartItemList, { id: id, count: 1 }]);
+    }
+  }
+
+
   return (
     <div className={styles.gridItemCard}>
       <div className={styles.itemInfoGrid}>
-        <img src={placeholderImg} className={styles.itemImg} />
-        <p className={styles.itemName}>KeyBoard Lelo for 1234 Rs.</p>
-        <p className={styles.itemPrice}>₹1234.00</p>
+        <img src={props.imgUrl} className={styles.itemImg} />
+        <p className={styles.itemName}>{props.name}</p>
+        <p className={styles.itemPrice}>₹ {props.price}</p>
       </div>
       <div className={styles.btnDivGrid}>
-        <button className={styles.cardBtn}>Add to cart</button>
-        <button className={styles.cardBtn}>Remove from wishlist</button>
+        <button onClick={() => {addToCart(props.id)}} className={styles.cardBtn}>Add to cart</button>
+        <button onClick={() => {removeFromWishlist(props.id)}} className={styles.cardBtn}>Remove from wishlist</button>
       </div>
     </div>
   );
 }
 
 function AllItemsListContainer() {
+  const wishlistItemIds = useRecoilValue(wishlistItems);
+  const allItemsList = useRecoilValue(allItems);
+
+  const wishlistDetails = wishlistItemIds.map(id => allItemsList.find(item => item.id === id));
+  
   return (
     <div className={styles.itemList}>
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
+      {wishlistDetails.map((item, index) => (
+        <ListItemCard
+          key={index}
+          id={item.id}
+          name={item.name}
+          price={item.price}
+          imgUrl={item.imgUrl}
+        />
+      ))}
     </div>
   );
 }
 
-function ListItemCard() {
+function ListItemCard(props) {
+  const [wishlistItemList, setWishlistItems] = useRecoilState(wishlistItems);
+  const [cartItemList, setCartItems] = useRecoilState(cartItems);
+  const setPopUp = useSetRecoilState(popUp);
+
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  }
+
+  const debouncedSetPopUp = debounce(() => setPopUp(false), 2000);
+
+  function removeFromWishlist(id) {
+    setWishlistItems(wishlistItemList.filter(itemId => itemId !== id));
+  }
+
+  function addToCart(id){
+    const alreadyExist = cartItemList.find((item) => item.id == id);
+    console.log(alreadyExist);
+    
+    if (alreadyExist) {
+      setPopUp(true);
+      debouncedSetPopUp();
+    } else {
+      removeFromWishlist(id);
+      setCartItems([...cartItemList, { id: id, count: 1 }]);
+    }
+  }
+
   return (
     <div className={styles.listItemCard}>
-      <img src={placeholderImg} className={styles.itemImg} />
+      <img src={props.imgUrl} className={styles.itemImg} />
       <div className={styles.itemInfoList}>
-        <p className={styles.itemName}>KeyBoard Lelo for 1234 Rs.</p>
-        <p className={styles.itemPrice}>₹1234.00</p>
+        <p className={styles.itemName}>{props.name}</p>
+        <p className={styles.itemPrice}>₹ {props.price}</p>
         <div className={styles.btnDivList}>
-          <button className={styles.cardBtn}>Add to cart</button>
-          <button className={styles.cardBtn}>Remove from wishlist</button>
+          <button onClick={() => {addToCart(props.id)}} className={styles.cardBtn}>Add to cart</button>
+          <button onClick={() => {removeFromWishlist(props.id)}} className={styles.cardBtn}>Remove from wishlist</button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function PopUp() {
+  return (
+    <div id="popUp" className={styles.popupDiv}>
+      <p className={styles.popupMsg}>Already in Wishlist or Cart</p>
     </div>
   );
 }

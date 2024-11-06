@@ -4,51 +4,67 @@ import substract from "../assets/icon/action/Substract.svg";
 import check from "../assets/icon/action/check.svg";
 import deleteIcon from "../assets/icon/action/delete.svg";
 import styles from "../css/cart.module.css";
-import { useState } from "react";
+import { cartItems } from "../store/cartItemsState";
+import { allItems } from "../store/allItemsState";
+import { purchaseDone } from "../store/behaviourState";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 function Cart() {
-  const [cond1, setCond1] = useState(false);
+  const isPurchaseDone = useRecoilValue(purchaseDone);
   return (
     <div className={styles.cartPage}>
       <CartContainer />
       <OrderSummary />
       {/* Condition for purchase*/}
-      {
-        cond1 ?
-        <PurchaseConfirm />
-        :
-        <></>
-      }
+      {isPurchaseDone ? <PurchaseConfirm /> : <></>}
     </div>
   );
 }
 
 function OrderSummary() {
+  const cartItemList = useRecoilValue(cartItems);
+  const allItemsList = useRecoilValue(allItems);
+
+  const mergedList = cartItemList.map((cartItem) => {
+    const itemDetails = allItemsList.find((item) => item.id === cartItem.id);
+    return {
+      ...cartItem,
+      ...itemDetails,
+    };
+  });
+
+  let totalPrice = 0; 
+  mergedList.map((item) => {
+    totalPrice += item.count * item.price;
+  })
+
   return (
     <div className={styles.orderSummary}>
       <h1 className={styles.orderSummaryHeading}>Order Summary</h1>
-      <ItemCntDiv />
+      <ItemCntDiv total={totalPrice}/>
       <hr className={styles.orderHr} />
-      <OrderTotalDiv />
+      <OrderTotalDiv total={totalPrice}/>
       <OrderPurchase />
     </div>
   );
 }
 
-function ItemCntDiv() {
+function ItemCntDiv(props) {
+  const cartItemList = useRecoilValue(cartItems)
+
   return (
     <div className={styles.itemCntDiv}>
-      <p className={styles.itemCnt}>Items (2):</p>
-      <p className={styles.itemCntTotal}>₹1234</p>
+      <p className={styles.itemCnt}>Items ({cartItemList.length}):</p>
+      <p className={styles.itemCntTotal}>₹ {props.total}</p>
     </div>
   );
 }
 
-function OrderTotalDiv() {
+function OrderTotalDiv(props) {
   return (
     <div className={styles.orderTotalDiv}>
       <p className={styles.orderTotal}>Order Total : </p>
-      <p className={styles.orderTotalPrice}>₹1234</p>
+      <p className={styles.orderTotalPrice}>₹ {props.total}</p>
     </div>
   );
 }
@@ -58,46 +74,106 @@ function OrderPurchase() {
 }
 
 function CartContainer() {
+  const cartItemList = useRecoilValue(cartItems);
+  const allItemsList = useRecoilValue(allItems);
+
+  const mergedList = cartItemList.map((cartItem) => {
+    const itemDetails = allItemsList.find((item) => item.id === cartItem.id);
+    return {
+      ...cartItem,
+      ...itemDetails,
+    };
+  });
+  // console.log(allItemsList);
+  
+  console.log(cartItemList);
+  
+
   return (
     <div className={styles.cartContainer}>
       <h1 className={styles.cartHeading}>Shopping Cart</h1>
-      <ItemCard />
-      <ItemCard />
-      <ItemCard />
+      {
+        mergedList.map((item, index) => (
+          <ItemCard 
+            key={index}
+            id={item.id}
+            name={item.name}
+            price={item.price}
+            imgUrl={item.imgUrl}
+            count={item.count}
+          />
+        ))
+      }
     </div>
   );
 }
 
-function ItemCard() {
+function ItemCard(props) {
+  
+  const [cartItemList, setCartItem] = useRecoilState(cartItems);
+
+  function decreaseCount(id){
+    if(props.count == 1) return;
+
+    const updatedItem = {
+      id: id,
+      count: props.count - 1
+    }
+
+    let newCartItemList = [...cartItemList];
+    newCartItemList = newCartItemList.filter((item) => (item.id !== id));
+    console.log(newCartItemList);
+    
+    newCartItemList.push(updatedItem);
+    
+    setCartItem(newCartItemList);
+  }
+
+  function increaseCount(id){
+    const updatedItem = {
+      id: id,
+      count: props.count + 1
+    }
+
+    let newCartItemList = [...cartItemList];
+    newCartItemList = newCartItemList.filter((item) => (item.id !== id));
+    console.log(newCartItemList);
+    
+    newCartItemList.push(updatedItem);
+    
+    setCartItem(newCartItemList);
+    
+  }
+
+  function deleteItem(id){
+
+  }
+
   return (
     <div className={styles.itemCard}>
-      <ItemInfoCard />
-      <hr className={styles.itemHr} />
-    </div>
-  );
-}
-
-function ItemInfoCard() {
-  return (
-    <div className={styles.itemInfoCard}>
-      <div className={styles.itemWrapper}>
-        <img className={styles.itemImg} src={imgPlaceholder} />
-        <div className={styles.itemInfo}>
-          <h3 className={styles.itemName}>Item Name</h3>
-          <p className={styles.itemAvailability}>In Stock</p>
-          <div className={styles.quantityAdjuster}>
-            <button className={styles.qtyBtn}>
-              <img className={styles.icons} src={substract} />
-            </button>
-            <p className={styles.qtyNum}>12</p>
-            <button className={styles.qtyBtn}>
-              <img className={styles.icons} src={add} />
-            </button>
-            <button className={styles.deleteBtn}>Delete <img className={styles.deleteIcon} src={deleteIcon} /></button>
+      <div className={styles.itemInfoCard}>
+        <div className={styles.itemWrapper}>
+          <img className={styles.itemImg} src={props.imgUrl} />
+          <div className={styles.itemInfo}>
+            <h3 className={styles.itemName}>{props.name}</h3>
+            <p className={styles.itemAvailability}>In Stock</p>
+            <div className={styles.quantityAdjuster}>
+              <button onClick={() => decreaseCount(props.id)} className={styles.qtyBtn}>
+                <img className={styles.icons} src={substract} />
+              </button>
+              <p className={styles.qtyNum}>{props.count}</p>
+              <button onClick={() => increaseCount(props.id)} className={styles.qtyBtn}>
+                <img className={styles.icons} src={add} />
+              </button>
+              <button onClick={() => deleteItem(props.id)} className={styles.deleteBtn}>
+                Delete <img className={styles.deleteIcon} src={deleteIcon} />
+              </button>
+            </div>
           </div>
         </div>
+        <h2 className={styles.price}>₹ {props.price}</h2>
       </div>
-      <h2 className={styles.price}>₹1234</h2>
+      <hr className={styles.itemHr} />
     </div>
   );
 }
@@ -108,7 +184,10 @@ function PurchaseConfirm() {
       <div className={styles.purchaseConfirm}>
         <h1>Purchase Successful</h1>
         <img src={check} className={styles.checkIcon} />
-        <p className={styles.message}>Thank you for the purchase. Your order has been processed successfully.</p>
+        <p className={styles.message}>
+          Thank you for the purchase. Your order has been processed
+          successfully.
+        </p>
         <h3 className={styles.total}>Total amount : ₹1234</h3>
         <button className={styles.closeBtn}>Close</button>
       </div>

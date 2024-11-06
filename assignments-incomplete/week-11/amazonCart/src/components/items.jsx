@@ -2,19 +2,19 @@ import gridIcon from "../assets/icon/action/grid.svg";
 import listIcon from "../assets/icon/action/list.svg";
 import styles from "../css/allitems.module.css";
 import placeholderImg from "../assets/images/ImagePlaceholder.jpg";
-import { layout } from "../store/behaviourState";
+import { layout, popUp } from "../store/behaviourState";
 import { allItems } from "../store/allItemsState";
 import { wishlistItems } from "../store/wishListItemsState";
 import { cartItems } from "../store/cartItemsState";
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 function Items() {
+  const showPopup = useRecoilValue(popUp);
   return (
     <div className={styles.itemContainer}>
-      <RecoilRoot>
-        <SideBar />
-        <MainContent />
-      </RecoilRoot>
+      {showPopup ? <PopUp /> : <></>}
+      <SideBar />
+      <MainContent />
     </div>
   );
 }
@@ -61,7 +61,6 @@ function Header() {
         Your one stop shop to fulfill all your needs.
       </p>
       <div className={styles.layoutBtns}>
-
         <button onClick={() => setLayout("grid")} className={styles.iconBtns}>
           <img src={gridIcon} />
         </button>
@@ -78,27 +77,68 @@ function AllItemsGridContainer() {
 
   return (
     <div className={styles.itemGrid}>
-      {
-        itemList.map((item, index) => (
-          <GridItemCard key={index} id={item.id} name={item.name} price={item.price} imgUrl={item.imgUrl}/>
-        ))
-      }
+      {itemList.map((item, index) => (
+        <GridItemCard
+          key={index}
+          id={item.id}
+          name={item.name}
+          price={item.price}
+          imgUrl={item.imgUrl}
+        />
+      ))}
     </div>
   );
 }
 
 function GridItemCard(props) {
-  const [ wishlistItemList, setWishlistItems ] = useRecoilState(wishlistItems);
-  const [ cartItemList, setCartItems ] = useRecoilState(cartItems);
+  const [wishlistItemList, setWishlistItems] = useRecoilState(wishlistItems);
+  const [cartItemList, setCartItems] = useRecoilState(cartItems);
+  const setPopUp = useSetRecoilState(popUp);
 
-  function addToWishlist(id){
-    console.log(id + " added to  wishlist");
-    setWishlistItems([...wishlistItemList, id], function (){console.log("wish " + wishlistItemList);});
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
   }
-  
-  function addToCart(id){
-    console.log(id + " added to  cart");
-    setCartItems([...cartItemList, id], () => {console.log("cart " + cartItemList);});
+
+  const debouncedSetPopUp = debounce(() => setPopUp(false), 2000);
+
+  function addToWishlist(id) {
+    const alreadyExist = wishlistItemList.find((item) => item === id);
+
+    if (alreadyExist) {
+      console.log("Already in Wish List");
+      setPopUp(true);
+      debouncedSetPopUp();
+    } else {
+      setPopUp(false);
+      console.log(id + " added to  wishlist");
+      setWishlistItems([...wishlistItemList, id]);
+    }
+  }
+
+  function addToCart(id) {
+    const alreadyExist = cartItemList.find((item) => item.id == id);
+    console.log(alreadyExist);
+
+    if (alreadyExist) {
+      // const index = parseInt(cartItemList.indexOf(alreadyExist));
+      // console.log(index);
+      // let newList = [...cartItemList];
+      // let newItem = { ...alreadyExist };
+      // newList.splice(index, 1);
+      // newItem.count += 1;
+      // newList = [...newList, newItem];
+      // console.log("Inc : " + newItem);
+
+      // setCartItems(newList);
+      setPopUp(true);
+      debouncedSetPopUp();
+    } else {
+      setCartItems([...cartItemList, { id: id, count: 1 }]);
+    }
   }
 
   return (
@@ -109,38 +149,116 @@ function GridItemCard(props) {
         <p className={styles.itemPrice}>₹ {props.price}</p>
       </div>
       <div className={styles.btnDivGrid}>
-        <button onClick={() => addToCart(props.id)} className={styles.cardBtn}>Add to cart</button>
-        <button onClick={() => addToWishlist(props.id)} className={styles.cardBtn}>Add to wishlist</button>
+        <button onClick={() => addToCart(props.id)} className={styles.cardBtn}>
+          Add to cart
+        </button>
+        <button
+          onClick={() => addToWishlist(props.id)}
+          className={styles.cardBtn}
+        >
+          Add to wishlist
+        </button>
       </div>
     </div>
   );
 }
 
 function AllItemsListContainer() {
+  const itemList = useRecoilValue(allItems);
+
   return (
     <div className={styles.itemList}>
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
-      <ListItemCard />
+      {itemList.map((item, index) => (
+        <ListItemCard
+          key={index}
+          id={item.id}
+          name={item.name}
+          price={item.price}
+          imgUrl={item.imgUrl}
+        />
+      ))}
     </div>
   );
 }
 
-function ListItemCard() {
+function ListItemCard(props) {
+  const [wishlistItemList, setWishlistItems] = useRecoilState(wishlistItems);
+  const [cartItemList, setCartItems] = useRecoilState(cartItems);
+  const setPopUp = useSetRecoilState(popUp);
+
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  }
+
+  const debouncedSetPopUp = debounce(() => setPopUp(false), 2000);
+
+  function addToWishlist(id) {
+    const alreadyExist = wishlistItemList.find((item) => item == id);
+
+    if (alreadyExist) {
+      // console.log("Already in Wish List");
+      setPopUp(true);
+      debouncedSetPopUp();
+    } else {
+      // console.log(id + " added to  wishlist");
+      setWishlistItems([...wishlistItemList, id]);
+    }
+  }
+
+  function addToCart(id) {
+    const alreadyExist = cartItemList.find((item) => item.id == id);
+    console.log(alreadyExist);
+
+    if (alreadyExist) {
+      // const index = parseInt(cartItemList.indexOf(alreadyExist));
+      // console.log(index);
+      // let newList = [...cartItemList];
+      // let newItem = { ...alreadyExist };
+      // newList.splice(index, 1);
+      // newItem.count += 1;
+      // newList = [...newList, newItem];
+      // console.log("Inc : " + newItem);
+      // setCartItems(newList);
+      setPopUp(true);
+      debouncedSetPopUp();
+    } else {
+      setCartItems([...cartItemList, { id: id, count: 1 }]);
+    }
+  }
+
   return (
     <div className={styles.listItemCard}>
-      <img src={placeholderImg} className={styles.itemImg} />
+      <img src={props.imgUrl} className={styles.itemImg} />
       <div className={styles.itemInfoList}>
-        <p className={styles.itemName}>KeyBoard Lelo for 1234 Rs.</p>
-        <p className={styles.itemPrice}>₹1234.00</p>
+        <p className={styles.itemName}>{props.name}</p>
+        <p className={styles.itemPrice}>{props.price}</p>
         <div className={styles.btnDivList}>
-          <button className={styles.cardBtn}>Add to cart</button>
-          <button className={styles.cardBtn}>Add to wishlist</button>
+          <button
+            onClick={() => addToCart(props.id)}
+            className={styles.cardBtn}
+          >
+            Add to cart
+          </button>
+          <button
+            onClick={() => addToWishlist(props.id)}
+            className={styles.cardBtn}
+          >
+            Add to wishlist
+          </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function PopUp() {
+  return (
+    <div id="popUp" className={styles.popupDiv}>
+      <p className={styles.popupMsg}>Already in Wishlist or Cart</p>
     </div>
   );
 }

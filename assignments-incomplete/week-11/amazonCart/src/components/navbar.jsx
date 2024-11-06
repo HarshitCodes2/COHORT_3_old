@@ -10,16 +10,14 @@ import { RecoilRoot, useRecoilValue } from "recoil";
 function NavBar() {
   return (
     <>
-      <RecoilRoot>
-        <div className={styles.navbarContainer}>
-          <div className={styles.items}>
-            <Link style={{ textDecoration: "none" }} to={"/"}>
-              <button className={styles.mainLogo}>amazon.in</button>
-            </Link>
-            <Logos />
-          </div>
+      <div className={styles.navbarContainer}>
+        <div className={styles.items}>
+          <Link style={{ textDecoration: "none" }} to={"/"}>
+            <button className={styles.mainLogo}>amazon.in</button>
+          </Link>
+          <Logos />
         </div>
-      </RecoilRoot>
+      </div>
     </>
   );
 }
@@ -32,7 +30,6 @@ function Logos() {
   const wishlistBadge = wishlistList.length;
 
   console.log(cartBadge);
-  
 
   return (
     <div className={styles.logoContainer}>

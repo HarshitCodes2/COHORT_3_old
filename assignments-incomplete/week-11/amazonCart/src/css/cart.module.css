@@ -25,6 +25,11 @@
   margin: 10px 0px;
 }
 
+.itemCntTotal,.orderTotalPrice,.qtyNum,.price{
+  font-family: sans-serif;
+
+}
+
 .orderTotalDiv{
   display: flex;
   justify-content: space-between;

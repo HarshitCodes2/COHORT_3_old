@@ -87,6 +87,7 @@
 .itemPrice{
   font-size: 16px;
   font-weight: bold;
+  font-family: sans-serif;
 }
 
 .btnDivGrid{
@@ -123,6 +124,8 @@
   gap: 10px;
   margin: 20px 20px;
   justify-content: space-between;
+  height: fit-content;
+  align-self: center;
 }
 
 .btnDivList{
@@ -147,4 +150,25 @@
 
 button{
   border: 1px solid transparent;  
+}
+
+.popupDiv{
+  position: fixed;
+  align-items: center;
+  width: 200px;
+  background-color: #fa9563e5;
+  padding: 40px;
+  top:10%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 10;
+}
+
+.popupMsg{
+  font-family: "Breite Grotesk Regular";
+  font-size: larger;
+  color: rgb(39, 0, 0);
 }
