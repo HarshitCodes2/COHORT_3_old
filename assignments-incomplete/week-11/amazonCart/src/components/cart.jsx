@@ -122,7 +122,6 @@ function ItemCard(props) {
 
     let newCartItemList = [...cartItemList];
     newCartItemList = newCartItemList.filter((item) => (item.id !== id));
-    console.log(newCartItemList);
     
     newCartItemList.push(updatedItem);
     
@@ -137,7 +136,6 @@ function ItemCard(props) {
 
     let newCartItemList = [...cartItemList];
     newCartItemList = newCartItemList.filter((item) => (item.id !== id));
-    console.log(newCartItemList);
     
     newCartItemList.push(updatedItem);
     
@@ -146,7 +144,10 @@ function ItemCard(props) {
   }
 
   function deleteItem(id){
-
+    let newCartItemList = [...cartItemList];
+    newCartItemList = newCartItemList.filter((item) => (item.id !== id));
+    
+    setCartItem(newCartItemList);
   }
 
   return (
