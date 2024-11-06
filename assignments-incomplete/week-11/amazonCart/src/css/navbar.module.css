@@ -1,0 +1,65 @@
+.navbarContainer{
+  background-color: rgb(18, 24, 38);
+  padding: 1vw;
+  color: white;
+  font-family: "Manrope", sans-serif;
+}
+
+.mainLogo{
+  font-size: 38px;
+  background-color: transparent;
+  color: white;
+  border: 1px solid transparent;  
+}
+
+.items{
+  display: flex;
+  justify-content: space-between;
+}
+
+.greeting{
+  font-size: 20px;
+  margin-right: 20px;
+}
+
+.logoContainer{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.logoBtn{
+  background-color: transparent;
+  width: fit-content;
+  display: flex;
+  border: 1px solid transparent;  
+  margin: 0px 2px;
+}
+
+.logo{
+  color: white;
+  border: 0px;
+  margin: 5px 7px;
+  display: flex;
+  width: 24px;
+
+}
+
+.logo:hover{
+  cursor: pointer;
+}
+
+.logoCount{
+  font-size: small;
+  background-color: rgb(232, 123, 53);
+  display: inline-block;
+  text-align: center;
+  border-radius: 20px;
+  height: 16px;
+  padding: 1px 5px;
+  position: relative;
+  right: 10px;
+  bottom: 3px;
+  text-decoration: none;
+
+}

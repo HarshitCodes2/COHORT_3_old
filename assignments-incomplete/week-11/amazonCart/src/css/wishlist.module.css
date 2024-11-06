@@ -1,0 +1,145 @@
+.itemContainer{
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+  font-family: "Breite Grotesk Regular";
+  letter-spacing: 0.5px;
+}
+
+.sideBar{
+  width: 20vw;
+  border-right: 1px solid lightgray;
+  padding: 10px 50px 10px 20px;
+}
+
+.sideBarCard{
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0px;
+}
+
+.mainContentDiv{
+  padding: 20px 50px;
+  width: 80vw;
+}
+
+.header{
+  margin-bottom: 30px;
+}
+
+.layoutBtns{
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.iconBtns{
+  background-color: transparent;
+  border: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 3px;
+  border: 1px solid transparent;  
+}
+
+.iconBtns:hover{
+  background-color: #f8cc6d41;
+}
+
+.itemGrid{
+  display: grid;
+  row-gap: 40px;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+}
+
+.gridItemCard{
+  width: fit-content;
+  max-width: 270px;
+  border: 1px solid lightgray;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.itemInfoGrid{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.itemImg{
+  height: 210px;
+  width: 270px;
+}
+
+.itemName{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.itemPrice{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btnDivGrid{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btnDivGrid .cardBtn{
+  background-color: rgb(248, 197, 15);
+  border: 0px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.itemList{
+  display: flex;
+  flex-direction: column;
+  max-width: 75vw;
+  gap: 20px;
+}
+
+.listItemCard{
+  display: flex;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.itemInfoList{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 20px;
+  justify-content: space-between;
+}
+
+.btnDivList{
+  display: flex;
+  gap: 10px;
+}
+
+.btnDivList .cardBtn{
+  background-color: rgb(248, 197, 15);
+  border: 0px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  width: 150px;
+}
+
+.cardBtn:hover{
+  background-color: rgb(246, 204, 50);
+  position: relative;
+  bottom: 2px;
+}

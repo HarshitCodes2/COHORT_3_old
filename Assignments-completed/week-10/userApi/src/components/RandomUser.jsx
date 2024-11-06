@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const RandomUser = () => {
   const [loading, setLoading] = useState(false);
-  const [triggerFetch, setTriggerFetch] = useState(1);
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(false);
   const [numberOfUsers, setNumberOfUsers] = useState(0);
@@ -13,7 +12,6 @@ const RandomUser = () => {
   function callApi(){
     setPageNum(prev => prev + 1);
     setNumberOfUsers(document.getElementById("userNumber").value);
-    setTriggerFetch(triggerFetch + 1);
   }
 
   useEffect(() => {
@@ -42,7 +40,7 @@ const RandomUser = () => {
       }
     }
     fetchPost();
-  }, [triggerFetch])
+  }, [pageNum])
 
   return (
     <div style={{padding:"50px", backgroundColor:"#dddddd", textAlign:"center", minHeight:"100vh"}}>
