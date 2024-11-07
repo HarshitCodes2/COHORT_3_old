@@ -5,7 +5,7 @@ import styles from "../css/navbar.module.css";
 import { Link } from "react-router-dom";
 import { cartItems } from "../store/cartItemsState";
 import { wishlistItems } from "../store/wishListItemsState";
-import { RecoilRoot, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 
 function NavBar() {
   return (
