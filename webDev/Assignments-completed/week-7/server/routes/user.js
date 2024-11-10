@@ -12,7 +12,7 @@ const userRouter = Router();
 
 userRouter.post('/signup', async (req, res) => {
     // logic to sign up admin
-    console.log("User SignUp Reached");
+    // console.log("User SignUp Reached");
     
 
     const signupBody = z.object({
@@ -39,7 +39,7 @@ userRouter.post('/signup', async (req, res) => {
 
     
     try{
-        const hashedPassword = await bcrypt.hash(password, SALTROUNDS);
+        const hashedPassword = bcrypt.hash(password, SALTROUNDS);
         // console.log(hashedPassword);
         try{
             await userModel.create({
@@ -80,7 +80,7 @@ userRouter.post('/login', async (req, res) => {
 
     const userMatched = await bcrypt.compare(password, hashedPassword);
     
-    console.log(userMatched);
+    // console.log(userMatched);
 
     if(userMatched){
         const token = jwt.sign({
