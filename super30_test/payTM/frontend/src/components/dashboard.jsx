@@ -12,7 +12,7 @@ export const Dashboard = () => {
   const setBalance = useSetRecoilState(balance);
   const navigate = useNavigate();
 
-  const authtoken = localStorage.getItem("Authorization")
+  const authtoken = localStorage.getItem("Authorization");
 
   useEffect(() => {
     async function getUserInfo() {

@@ -3,13 +3,14 @@ import { SubHeading } from "./commonComponents/subheading";
 import { InputDiv } from "./commonComponents/inputdiv";
 import { Button } from "./commonComponents/button";
 import { BottomWarning } from "./commonComponents/bottomwarning";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   fName,
   lName,
   signUpemail,
   signUppassword,
 } from "../store/signupsigninstate";
+import { userFname } from "../store/behaviourState";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -18,11 +19,12 @@ export const SignUpPage = () => {
   const [lastName, setLname] = useRecoilState(lName);
   const [email, setSignupEmail] = useRecoilState(signUpemail);
   const [password, setSignupPassword] = useRecoilState(signUppassword);
+  const setUserFname = useSetRecoilState(userFname);
   const navigate = useNavigate();
 
   return (
     <div className="flex min-h-screen justify-center p-10 items-center">
-      <div className="bg-white flex flex-col h-fit w-72 sm:w-96 py-8 px-6 rounded-lg">
+      <div className="bg-white flex flex-col h-fit w-72 sm:w-96 py-8 px-6 rounded-lg outline outline-1 outline-yellow-500">
         <Heading>Sign Up</Heading>
         <SubHeading>Enter your information to create an account</SubHeading>
         <InputDiv
@@ -58,7 +60,7 @@ export const SignUpPage = () => {
           onClick={async () => {
             try {
               const res = await axios.post(
-                "http://localhost:3000/api/v1/user/signup",
+                "http://localhost:3001/user/signup",
                 {
                   firstName: firstName,
                   lastName: lastName,
@@ -68,9 +70,11 @@ export const SignUpPage = () => {
               );
 
               localStorage.setItem("Authorization", `Bearer ${res.data.token}`)
-              navigate("/dashboard");
+              setUserFname(firstName);
+              navigate("/items")
 
             } catch (e) {
+              console.log(e);
               if (e.response.data.message) {
                 alert(e.response.data.message);
               }

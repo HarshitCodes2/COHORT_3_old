@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL)
+
+async function connectToDb(){
+  await mongoose.connect(process.env.MONGO_URL)
+}
+connectToDb();
 
 const userSchema = new mongoose.Schema({
   firstName: {
