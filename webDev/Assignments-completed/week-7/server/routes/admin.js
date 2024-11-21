@@ -25,11 +25,11 @@ adminRouter.post('/signup',async (req, res) => {
 
     if(!inputValidation.success){
         // console.log("Input Validation Failed");
-        res.status(301).json({
+        return res.status(301).json({
             message: "Incorrect Creds",
             error: inputValidation.error
         });
-        return;
+
     }
     
     const adminName = req.body.name;
@@ -53,22 +53,22 @@ adminRouter.post('/signup',async (req, res) => {
         }catch(e){
             console.log(e);
             
-            res.json({
+            return res.json({
                 message: `${err.keyValue.email} Already in use`
             })
-            return;
+
         }
     }catch(e){
         console.log(e);
         
-        res.json({
+        return res.json({
             message : "Failed to create an Account",
             error : e
         });
-        return;
+
     }
 
-    res.json({
+    return res.json({
         message : "You have Signed Up"
     })
 
@@ -95,12 +95,12 @@ adminRouter.post('/login', async (req, res) => {
             adminName : admin.name
         }, JWT_SECRET);
 
-        res.json({
+        return res.json({
             token : token,
             message : "You have been signed in"
         });
     }else{
-        res.status(401).json({
+      return res.status(401).json({
             message : "Incorrect Credentials"
         });
     }
@@ -126,11 +126,10 @@ adminRouter.post('/courses', async (req, res) => {
     if(!inputValidation.success){
         console.log("Invalid Inputs");
         
-        res.status(402).json({
+        return res.status(402).json({
             message: "Incorrect Inputs",
             error: inputValidation.error
         });
-        return;
     }
 
     const courseName = req.body.courseName;
@@ -149,15 +148,14 @@ adminRouter.post('/courses', async (req, res) => {
             desc : courseDesc,
             img : courseImgUrl
         });
-        res.status(200).json({
+        return res.status(200).json({
             message : "Course created"
         });
-        return;
     }catch(e){
         console.log(e);
     }
 
-    res.status(500).json({
+    return res.status(500).json({
         message : "Server Problem at admin/courses"
     })
 
@@ -198,11 +196,11 @@ adminRouter.put('/courses/:courseId', async (req, res) => {
     }
 
     if(result == null){
-        res.status(401).json({
+        return res.status(401).json({
             message : "You cannot edit courses from different Author"
         });
     }else{
-        res.json({
+        return res.json({
             message : "Success"
         });
     }
@@ -220,7 +218,7 @@ adminRouter.get('/courses', async (req, res) => {
             authorId : adminId
         });
         // console.log(courseList);
-        res.json({
+        return res.json({
             courseList : courseList
         });
     }catch(e){
