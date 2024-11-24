@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @unique @default(cuid())
+  username String  @unique
+  password String
+  role     Role
+  avatar   Avatar? @relation(fields: [avatarId], references: [id])
+  avatarId String?
+  spaces   Space[]
+}
+
+model Space {
+  id            String         @id @unique @default(cuid())
+  name          String
+  width         Int
+  height        Int
+  thumbnail     String?
+  creator       User           @relation(fields: [creatorId], references: [id])
+  creatorId     String
+  SpaceElements SpaceElement[]
+}
+
+model Element {
+  id            String         @id @unique @default(cuid())
+  width         Int
+  height        Int
+  static        Boolean
+  imageUrl      String?
+  SpaceElements SpaceElement[]
+  MapElements   MapElement[]
+}
+
+model SpaceElement {
+  id        String  @id @unique @default(cuid())
+  x         Int
+  y         Int
+  element   Element @relation(fields: [elementId], references: [id])
+  elementId String
+  space     Space   @relation(fields: [spaceId], references: [id])
+  spaceId   String
+}
+
+model Map {
+  id          String       @id @unique @default(cuid())
+  width       Int
+  height      Int
+  name        String
+  thumbnail   String
+  mapElements MapElement[]
+}
+
+model MapElement {
+  id        String  @id @unique @default(cuid())
+  x         Int
+  y         Int
+  map       Map     @relation(fields: [mapId], references: [id])
+  mapId     String
+  element   Element @relation(fields: [elementId], references: [id])
+  elementId String
+}
+
+model Avatar {
+  id     String  @id @unique @default(cuid())
+  imgUrl String?
+  name   String
+  users  User[]
+}
+
+enum Role {
+  Admin
+  User
+}
