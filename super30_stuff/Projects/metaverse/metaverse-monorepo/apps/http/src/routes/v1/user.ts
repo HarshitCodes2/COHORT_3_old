@@ -17,6 +17,19 @@ userRouter.post("/metadata", userAuth, async (req, res) => {
     return;
   }
 
+  const avatar = await client.avatar.findUnique({
+    where: {
+      id: parsedData.data.avatarId
+    }
+  });
+
+  if(!avatar){
+    res.status(400).json({
+      message: "Invalid Avatar Id"
+    });
+    return;
+  }
+
   try{
     const user = await client.user.findFirst({
       where:{
@@ -28,7 +41,7 @@ userRouter.post("/metadata", userAuth, async (req, res) => {
       user.avatarId = parsedData.data.avatarId;
 
       res.json({
-        message: "Avatar Updated"
+        avatarId: user.avatarId
       });
 
     }else{
@@ -46,9 +59,9 @@ userRouter.post("/metadata", userAuth, async (req, res) => {
   }
 }); 
 
-userRouter.get("/metadata/bulk", userAuth, async (req, res) => {
+userRouter.get("/metadata/bulk", async (req, res) => {
   
-  const idsStr = req.query.id as string;
+  const idsStr = req.query.ids as string;
   const idsArr = idsStr.split(',') as Array<string>;
 
   try{

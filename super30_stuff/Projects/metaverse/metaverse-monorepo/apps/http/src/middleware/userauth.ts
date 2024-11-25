@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 
 export const userAuth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
-
+  
   if (!token) {
+    // console.log("Auth");
     res.status(403).json({
       message: "UnAuthorized Access: Header missing",
     });

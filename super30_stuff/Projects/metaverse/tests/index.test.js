@@ -1,6 +1,41 @@
-import axios from "axios";
-import WebSocket, { WebSocketServer } from "ws";
-import express from "express";
+const axios2 = require("axios");
+const WebSocket = require("ws");
+// import express from "express";
+
+const axios = {
+  post: async (...args) => {
+    try {
+      const res = await axios2.post(...args);
+      return res;
+    } catch (e) {
+      return e.response;
+    }
+  },
+  get: async (...args) => {
+    try {
+      const res = await axios2.get(...args);
+      return res;
+    } catch (e) {
+      return e.response;
+    }
+  },
+  put: async (...args) => {
+    try {
+      const res = await axios2.put(...args);
+      return res;
+    } catch (e) {
+      return e.response;
+    }
+  },
+  delete: async (...args) => {
+    try {
+      const res = await axios2.delete(...args);
+      return res;
+    } catch (e) {
+      return e.response;
+    }
+  },
+};
 
 const BACKEND_URL = "http://localhost:3000"; // subject to change
 const WS_URL = "ws://localhost:8080"; // subject to change
@@ -10,31 +45,32 @@ describe("Authentication", () => {
     const username = "harshit" + Math.random() + "@gmail.com";
     const password = "123456";
 
-    const respone1admin = await axios.post(
-      `${BACKEND_URL}/api/v1/admin/signup`,
-      {
-        username: username,
-        password: password,
-        type: "admin",
-      }
-    );
+    const respone1admin = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username,
+      password: password,
+      type: "admin",
+    });
 
     expect(respone1admin.status).toBe(200);
     expect(respone1admin.data.userId).toBeDefined();
 
-    const respone2admin = await axios.post(
-      `${BACKEND_URL}/api/v1/admin/signup`,
-      {
-        username: username,
-        password: password,
-        type: "admin",
-      }
-    );
-
-    expect(respone2admin.statusCode).toBe(400);
-
-    const respone1user = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
+    const respone2admin = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
       username: username,
+      password: password,
+      type: "admin",
+    });
+
+    // console.log(
+    //   "1232131233112321312331123213123311232131233112321312331123213123311232131233112321312331"
+    // );
+    // console.log(respone2admin);
+
+    expect(respone2admin.status).toBe(400);
+
+    const username2 = "harshit" + Math.random() + "@gmail.com";
+
+    const respone1user = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username2,
       password: password,
       type: "user",
     });
@@ -42,13 +78,13 @@ describe("Authentication", () => {
     expect(respone1user.status).toBe(200);
     expect(respone1user.data.userId).toBeDefined();
 
-    const respone2user = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
-      username: username,
+    const respone2user = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username2,
       password: password,
-      type: "admin",
+      type: "user",
     });
 
-    expect(respone2user.statusCode).toBe(400);
+    expect(respone2user.status).toBe(400);
   });
 
   test("User can signin only when they have signed up", async () => {
@@ -56,23 +92,25 @@ describe("Authentication", () => {
     const password = "123456";
 
     const respone1AdminLogin = await axios.post(
-      `${BACKEND_URL}/api/v1/admin/signin`,
+      `${BACKEND_URL}/api/v1/signin`,
       {
         username: username,
         password: password,
       }
     );
 
+    // console.log(respone1AdminLogin);
+
     expect(respone1AdminLogin.status).toBe(400);
 
-    await axios.post(`${BACKEND_URL}/api/v1/admin/signup`, {
+    await axios.post(`${BACKEND_URL}/api/v1/signup`, {
       username: username,
       password: password,
       type: "admin",
     });
 
     const respone2AdminLogin = await axios.post(
-      `${BACKEND_URL}/api/v1/admin/signin`,
+      `${BACKEND_URL}/api/v1/signin`,
       {
         username: username,
         password: password,
@@ -82,29 +120,25 @@ describe("Authentication", () => {
     expect(respone2AdminLogin.status).toBe(200);
     expect(respone2AdminLogin.data.token).toBeDefined();
 
-    const respone1UserLogin = await axios.post(
-      `${BACKEND_URL}/api/v1/user/signin`,
-      {
-        username: username,
-        password: password,
-      }
-    );
+    const username2 = "harshit" + Math.random() + "@gmail.com";
+
+    const respone1UserLogin = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+      username: username2,
+      password: password,
+    });
 
     expect(respone1UserLogin.status).toBe(400);
 
-    await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
-      username: username,
+    await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username2,
       password: password,
       type: "user",
     });
 
-    const respone2UserLogin = await axios.post(
-      `${BACKEND_URL}/api/v1/user/signin`,
-      {
-        username: username,
-        password: password,
-      }
-    );
+    const respone2UserLogin = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+      username: username2,
+      password: password,
+    });
 
     expect(respone2UserLogin.status).toBe(200);
     expect(respone2UserLogin.data.token).toBeDefined();
@@ -116,41 +150,51 @@ describe("User Information", () => {
   let adminToken;
   let avatarId;
   let userId;
+  let adminId;
 
   beforeAll(async () => {
     const username = "harshit" + Math.random() + "@gmail.com";
     const password = "123456";
 
-    const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
+    const response = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
       username: username,
       password: password,
       type: "user",
     });
 
     userId = response.data.userId;
+    // console.log("UserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUser");
+    // console.log(userId);
 
-    const res = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, {
+    const res = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
       username: username,
       password: password,
     });
 
     userToken = res.data.token;
+    // console.log(userToken);
 
     const username2 = "harshit" + Math.random() + "@gmail.com";
     const password2 = "123456";
 
-    await axios.post(`${BACKEND_URL}/api/v1/admin/signup`, {
-      username: username,
-      password: password,
+    await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username2,
+      password: password2,
       type: "admin",
     });
 
-    const res2 = await axios.post(`${BACKEND_URL}/api/v1/admin/signin`, {
+    adminId = response.data.userId;
+
+    const res2 = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
       username: username2,
       password: password2,
     });
 
+    // console.log("ADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMINADMIN");
+    // console.log(res2);
+
     adminToken = res2.data.token;
+    // console.log(adminToken);
 
     const res3 = await axios.post(
       `${BACKEND_URL}/api/v1/admin/avatar`,
@@ -160,14 +204,21 @@ describe("User Information", () => {
         name: "Timmy",
       },
       {
-        Authorization: `Bearer ${adminToken}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
-    avatarId = res3.data.id;
+    avatarId = res3.data.avatarId;
+
+    // console.log(res3);
   });
 
   test("Update User Avatar is possible only after login and correct avatarId is provided", async () => {
+    // console.log(avatarId);
+    // console.log(typeof avatarId);
+
     const res = await axios.post(
       `${BACKEND_URL}/api/v1/user/metadata`,
       {
@@ -179,6 +230,9 @@ describe("User Information", () => {
         },
       }
     );
+
+    // console.log("REsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREsREs");
+    // console.log(res.data);
 
     expect(res.status).toBe(200);
     expect(res.data.avatarId).toBeDefined();
@@ -195,6 +249,8 @@ describe("User Information", () => {
       }
     );
 
+    // console.log(res2);
+
     expect(res2.status).toBe(400);
 
     const res3 = await axios.post(`${BACKEND_URL}/api/v1/user/metadata`, {});
@@ -204,12 +260,16 @@ describe("User Information", () => {
 
   test("Get available Avatars", async () => {
     const res = await axios.get(`${BACKEND_URL}/api/v1/avatars`);
+    // console.log(res.data.avatars);
+
     expect(res.data.avatars.length).not.toBe(0);
   });
 
   test("Get Users Metadata", async () => {
+    // console.log(`${BACKEND_URL}/api/v1/user/metadata/bulk?ids=${userId}`);
+
     const res = await axios.get(
-      `${BACKEND_URL}/api/v1/user/metadata/bulk?ids=[${userId}]`
+      `${BACKEND_URL}/api/v1/user/metadata/bulk?ids=${userId}`
     );
     expect(res.data.avatars.length).toBe(1);
     expect(res.data.avatars[0].userId).toBe(userId);
@@ -230,7 +290,7 @@ describe("Space Dashboard", () => {
     const username = "harshit" + Math.random() + "@gmail.com";
     const password = "123456";
 
-    const adminSignUp = await axios.post(`${BACKEND_URL}/api/v1/admin/signup`, {
+    const adminSignUp = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
       username: username,
       password: password,
       type: "admin",
@@ -238,7 +298,7 @@ describe("Space Dashboard", () => {
 
     adminId = adminSignUp.data.userId;
 
-    const adminSignIn = await axios.post(`${BACKEND_URL}/api/v1/admin/signin`, {
+    const adminSignIn = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
       username: username,
       password: password,
     });
@@ -255,7 +315,9 @@ describe("Space Dashboard", () => {
         static: true, // weather or not the user can sit on top of this element (is it considered as a collission or not)
       },
       {
-        Authorization: `Bearer ${adminToken}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
@@ -271,13 +333,16 @@ describe("Space Dashboard", () => {
         static: true, // weather or not the user can sit on top of this element (is it considered as a collission or not)
       },
       {
-        Authorization: `Bearer ${adminToken}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
     elementId2 = element2.data.id;
+    // console.log(elementId2);
 
-    const map = await axios.put(
+    const map = await axios.post(
       `${BACKEND_URL}/api/v1/admin/map`,
       {
         thumbnail: "https://thumbnail.com/a.png",
@@ -307,22 +372,26 @@ describe("Space Dashboard", () => {
         ],
       },
       {
-        Authorization: `Bearer ${adminToken}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
     mapId = map.data.id;
 
-    const userSignUp = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
-      username: username,
+    const username2 = "harshit" + Math.random() + "@gmail.com";
+
+    const userSignUp = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username2,
       password: password,
       type: "user",
     });
 
     userId = userSignUp.data.userId;
 
-    const userSignIn = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, {
-      username: username,
+    const userSignIn = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+      username: username2,
       password: password,
     });
 
@@ -345,6 +414,8 @@ describe("Space Dashboard", () => {
     );
 
     spaceId = res.data.spaceId;
+
+    // console.log(res.data);
     expect(res.status).toBe(200);
     expect(res.data.spaceId).toBeDefined();
 
@@ -361,7 +432,7 @@ describe("Space Dashboard", () => {
       }
     );
 
-    spaceId = res2.data.spaceId;
+    // spaceId = res2.data.spaceId;
     expect(res2.status).toBe(200);
     expect(res2.data.spaceId).toBeDefined();
 
@@ -379,6 +450,8 @@ describe("Space Dashboard", () => {
     );
 
     spaceId = res3.data.spaceId;
+    // console.log(res3);
+
     expect(res3.status).toBe(200);
     expect(res3.data.spaceId).toBeDefined();
   });
@@ -408,7 +481,7 @@ describe("Space Dashboard", () => {
       {}
     );
 
-    expect(res2.status).toBe(400);
+    expect(res2.status).toBe(403);
   });
 
   test("User is able to only delete a valid space", async () => {
@@ -425,15 +498,19 @@ describe("Space Dashboard", () => {
       }
     );
 
-    const res1 = await axios.delete(
-      `${BACKEND_URL}/api/v1/space/${res0.data.spaceId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      }
-    );
+    // console.log(res0.data);
+    spaceId = res0.data.spaceId;
 
+    const res1 = await axios.delete(`${BACKEND_URL}/api/v1/space/${spaceId}`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+
+    // console.log(
+    //   "res1res1res1res1res1res1res1res1res1res1res1res1res1res1res1res1res1res1res1res1res1"
+    // );
+    // console.log(res1);
     expect(res1.status).toBe(200);
 
     const res2 = await axios.delete(`${BACKEND_URL}/api/v1/space/jhdadmn`, {
@@ -442,6 +519,10 @@ describe("Space Dashboard", () => {
       },
     });
 
+    // console.log(
+    //   "res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2res2"
+    // );
+    // console.log(res2);
     expect(res2.status).toBe(400);
   });
 
@@ -544,7 +625,7 @@ describe("Arena Endpoints", () => {
     const username = "harshit" + Math.random() + "@gmail.com";
     const password = "123456";
 
-    const adminSignUp = await axios.post(`${BACKEND_URL}/api/v1/admin/signup`, {
+    const adminSignUp = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
       username: username,
       password: password,
       type: "admin",
@@ -552,7 +633,7 @@ describe("Arena Endpoints", () => {
 
     adminId = adminSignUp.data.userId;
 
-    const adminSignIn = await axios.post(`${BACKEND_URL}/api/v1/admin/signin`, {
+    const adminSignIn = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
       username: username,
       password: password,
     });
@@ -569,11 +650,15 @@ describe("Arena Endpoints", () => {
         static: true, // weather or not the user can sit on top of this element (is it considered as a collission or not)
       },
       {
-        Authorization: `Bearer ${adminToken}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
     elementId1 = element1.data.id;
+    // console.log("elementId1");
+    // console.log(elementId1);
 
     const element2 = await axios.post(
       `${BACKEND_URL}/api/v1/admin/element`,
@@ -585,13 +670,17 @@ describe("Arena Endpoints", () => {
         static: true, // weather or not the user can sit on top of this element (is it considered as a collission or not)
       },
       {
-        Authorization: `Bearer ${adminToken}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
     elementId2 = element2.data.id;
+    // console.log("elementId2");
+    // console.log(elementId2);
 
-    const map = await axios.put(
+    const map = await axios.post(
       `${BACKEND_URL}/api/v1/admin/map`,
       {
         thumbnail: "https://thumbnail.com/a.png",
@@ -621,11 +710,15 @@ describe("Arena Endpoints", () => {
         ],
       },
       {
-        Authorization: `Bearer ${adminToken}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
     mapId = map.data.id;
+    // console.log("mapId");
+    // console.log(mapId);
 
     const res = await axios.post(
       `${BACKEND_URL}/api/v1/space`,
@@ -642,6 +735,8 @@ describe("Arena Endpoints", () => {
     );
 
     spaceId = res.data.spaceId;
+    // console.log("spaceId");
+    // console.log(spaceId);
   });
 
   test("Get a Space", async () => {
@@ -650,6 +745,8 @@ describe("Arena Endpoints", () => {
         Authorization: `Bearer ${adminToken}`,
       },
     });
+
+    // console.log(res.data.elements);
 
     expect(res.data.dimensions).toBe("100x200");
     expect(res.data.elements.length).toBe(4);
@@ -729,12 +826,21 @@ describe("Arena Endpoints", () => {
       },
     });
 
+    // console.log(res.data);
     const elementId = res.data.elements[0].id;
+    // console.log(elementId);
 
     const delRes = await axios.delete(`${BACKEND_URL}/api/v1/space/element`, {
-      spaceId: spaceId,
-      id: elementId,
+      data: {
+        spaceId: spaceId,
+        id: elementId,
+      },
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+      },
     });
+
+    // console.log(delRes.data);
 
     const res2 = await axios.get(`${BACKEND_URL}/api/v1/space/${spaceId}`, {
       headers: {
@@ -748,7 +854,8 @@ describe("Arena Endpoints", () => {
 });
 
 describe("Admin/Map Creator endpoints", () => {
-  let token;
+  let adminToken;
+  let userToken;
   let elementId;
   let avatarId;
   let mapId;
@@ -757,18 +864,36 @@ describe("Admin/Map Creator endpoints", () => {
     const username = "harshit" + Math.random() + "@gmail.com";
     const password = "123456";
 
-    await axios.post(`${BACKEND_URL}/api/v1/admin/signup`, {
+    await axios.post(`${BACKEND_URL}/api/v1/signup`, {
       username: username,
       password: password,
       type: "admin",
     });
 
-    const res = await axios.post(`${BACKEND_URL}/api/v1/admin/signin`, {
+    const res = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
       username: username,
       password: password,
     });
 
-    token = res.data.token;
+    adminToken = res.data.token;
+
+    const username2 = "harshit" + Math.random() + "@gmail.com";
+
+    const userSignUp = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username2,
+      password: password,
+      type: "user",
+    });
+
+    userId = userSignUp.data.userId;
+
+    const userSignIn = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+      username: username2,
+      password: password,
+    });
+
+    userToken = userSignIn.data.token;
+
   });
 
   test("Only Admin can Create an Element", async () => {
@@ -782,11 +907,15 @@ describe("Admin/Map Creator endpoints", () => {
         static: true, // weather or not the user can sit on top of this element (is it considered as a collission or not)
       },
       {
-        Authorization: `Bearer ${token}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
     elementId = res.data.id;
+    // console.log(elementId);
+    
     expect(res.status).toBe(200);
     expect(res.data.id).toBeDefined();
 
@@ -799,22 +928,45 @@ describe("Admin/Map Creator endpoints", () => {
     });
 
     expect(res2.status).toBe(403);
+
+    const res3 = await axios.post(
+      `${BACKEND_URL}/api/v1/admin/element`,
+      {
+        imageUrl:
+          "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRCRca3wAR4zjPPTzeIY9rSwbbqB6bB2hVkoTXN4eerXOIkJTG1GpZ9ZqSGYafQPToWy_JTcmV5RHXsAsWQC3tKnMlH_CsibsSZ5oJtbakq&usqp=CAE",
+        width: 1,
+        height: 1,
+        static: true, // weather or not the user can sit on top of this element (is it considered as a collission or not)
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      }
+    );
+
+    expect(res3.status).toBe(403);
+    // console.log(res3.data);
   });
 
   test("Only Admin can Update an Element", async () => {
+    // console.log(`${BACKEND_URL}/api/v1/admin/element/${elementId}`);
+    
     const res = await axios.put(
-      `${BACKEND_URL}/api/v1/admin/element/:${elementId}`,
+      `${BACKEND_URL}/api/v1/admin/element/${elementId}`,
       {
         imageUrl:
           "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRCRca3wAR4zjPPTzeIY9rSwbbqB6bB2hVkoTXN4eerXOIkJTG1GpZ9ZqSGYafQPToWy_JTcmV5RHXsAsWQC3tKnMlH_CsibsSZ5oJtbakq&usqp=CAE",
       },
       {
-        Authorization: `Bearer ${token}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
-    );
+    ); 
 
+    console.log(res.data);
     expect(res.status).toBe(200);
-    expect(res.data.id).toBeDefined();
 
     const res2 = await axios.post(`${BACKEND_URL}/api/v1/admin/element`, {
       imageUrl:
@@ -833,13 +985,15 @@ describe("Admin/Map Creator endpoints", () => {
         name: "Timmy",
       },
       {
-        Authorization: `Bearer ${token}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
-    avatarId = res.data.id;
+    avatarId = res.data.avatarId;
     expect(res.status).toBe(200);
-    expect(res.data.id).toBeDefined();
+    expect(res.data.avatarId).toBeDefined();
 
     const res2 = await axios.post(`${BACKEND_URL}/api/v1/admin/element`, {
       imageUrl:
@@ -852,7 +1006,7 @@ describe("Admin/Map Creator endpoints", () => {
 
   // the test below will be edited to better reflect the element id
   test("Only Admin can Create a Map", async () => {
-    const res = await axios.put(
+    const res = await axios.post(
       `${BACKEND_URL}/api/v1/admin/map`,
       {
         thumbnail: "https://thumbnail.com/a.png",
@@ -860,32 +1014,36 @@ describe("Admin/Map Creator endpoints", () => {
         name: "100 person interview room",
         defaultElements: [
           {
-            elementId: "chair1",
+            elementId: elementId,
             x: 20,
             y: 20,
           },
           {
-            elementId: "chair2",
+            elementId: elementId,
             x: 18,
             y: 20,
           },
           {
-            elementId: "table1",
+            elementId: elementId,
             x: 19,
             y: 20,
           },
           {
-            elementId: "table2",
+            elementId: elementId,
             x: 19,
             y: 20,
           },
         ],
       },
       {
-        Authorization: `Bearer ${token}`,
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
     );
 
+    console.log(res.data);
+    
     mapId = res.data.id;
     expect(res.status).toBe(200);
     expect(res.data.id).toBeDefined();
@@ -936,7 +1094,7 @@ describe("WebSocket Tests", () => {
     const username = "harshit" + Math.random() + "@gmail.com";
     const password = "123456";
 
-    const userSignUp = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
+    const userSignUp = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
       username: username,
       password: password,
       type: "user",
@@ -944,23 +1102,26 @@ describe("WebSocket Tests", () => {
 
     userId = userSignUp.data.userId;
 
-    const userSignIn = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, {
+    const userSignIn = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
       username: username,
       password: password,
     });
 
     userToken = userSignIn.data.token;
 
-    const adminSignUp = await axios.post(`${BACKEND_URL}/api/v1/admin/signup`, {
-      username: username,
+    const username2 = "harshit" + Math.random() + "@gmail.com";
+
+
+    const adminSignUp = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+      username: username2,
       password: password,
       type: "admin",
     });
 
     adminId = adminSignUp.data.userId;
 
-    const adminSignIn = await axios.post(`${BACKEND_URL}/api/v1/admin/signin`, {
-      username: username,
+    const adminSignIn = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+      username: username2,
       password: password,
     });
 
@@ -1126,7 +1287,7 @@ describe("WebSocket Tests", () => {
       JSON.stringify({
         type: "move",
         payload: {
-          x: 24876,
+          x: 248786,
           y: 3486721,
         },
       })

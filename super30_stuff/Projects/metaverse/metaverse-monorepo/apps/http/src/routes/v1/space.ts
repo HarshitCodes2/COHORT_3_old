@@ -1,6 +1,10 @@
 import { Router, text } from "express";
 import { userAuth } from "../../middleware/userauth";
-import { AddElementSchema, CreateSpaceSchema, DeleteElementSchema } from "../../types";
+import {
+  AddElementSchema,
+  CreateSpaceSchema,
+  DeleteElementSchema,
+} from "../../types";
 import client from "@repo/db/client";
 
 export const spaceRouter = Router();
@@ -15,8 +19,15 @@ spaceRouter.post("/", userAuth, async (req, res) => {
     return;
   }
 
+  if (!parsedData.data.mapId && !parsedData.data.dimensions) {
+    res.status(400).json({
+      message: "Incorrect data sent",
+    });
+    return;
+  }
+
   try {
-    if (!parsedData.data.mapId) {
+    if (!parsedData.data.mapId && parsedData.data.dimensions) {
       const space = await client.space.create({
         data: {
           name: parsedData.data.name,
@@ -84,6 +95,54 @@ spaceRouter.post("/", userAuth, async (req, res) => {
   }
 });
 
+spaceRouter.delete("/element", userAuth, async (req, res) => {
+  // console.log("FAFASFFSAFSFSFAFASFFSAFSFSFAFASFFSAFSFSFAFASFFSAFSFS");
+  
+  const parsedData = DeleteElementSchema.safeParse(req.body);
+
+  if (!parsedData.success) {
+    res.status(400).json({
+      message: "Invalid Input",
+    });
+    return;
+  }
+
+  const spaceElement = await client.spaceElement.findUnique({
+    where: {
+      id: parsedData.data.id,
+    },
+    include: {
+      space: true,
+    },
+  });
+
+  if (!spaceElement) {
+    res.status(400).json({
+      message: "Element Does not exist",
+    });
+    return;
+  }
+
+  if (spaceElement.space.creatorId !== req.userId) {
+    res.status(403).json({
+      message: "UnAuthorized",
+    });
+    return;
+  }
+
+  await client.spaceElement.delete({
+    where: {
+      id: parsedData.data.id,
+    },
+  });
+
+  res.json({
+    message: "Element deleted",
+  });
+  return;
+});
+
+
 spaceRouter.delete("/:spaceId", userAuth, async (req, res) => {
   const spaceId = req.params.spaceId;
 
@@ -101,9 +160,10 @@ spaceRouter.delete("/:spaceId", userAuth, async (req, res) => {
       res.status(400).json({
         message: "No Space for the given spaceId",
       });
+      return;
     }
 
-    if (space?.creatorId != req.userId) {
+    if (space.creatorId != req.userId) {
       res.status(400).json({
         message: "You cannot delete someone else's Space",
       });
@@ -114,6 +174,10 @@ spaceRouter.delete("/:spaceId", userAuth, async (req, res) => {
       where: {
         id: spaceId,
       },
+    });
+
+    res.json({
+      message: "Space deleted",
     });
   } catch (e) {
     res.status(500).json({
@@ -157,6 +221,8 @@ spaceRouter.get("/all", userAuth, async (req, res) => {
 });
 
 spaceRouter.get("/:spaceId", async (req, res) => {
+  // console.log("GETGETGETGETGETGETGETGETGETGETGETGETGETGETGETGETGET");
+  
   // get space is from req.params
 
   const spaceId = req.params.spaceId;
@@ -207,6 +273,8 @@ spaceRouter.get("/:spaceId", async (req, res) => {
 });
 
 spaceRouter.post("/element", userAuth, async (req, res) => {
+  // console.log("POSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOST");
+
   const parsedData = AddElementSchema.safeParse(req.body);
 
   if (!parsedData.success) {
@@ -272,47 +340,3 @@ spaceRouter.post("/element", userAuth, async (req, res) => {
   return;
 });
 
-spaceRouter.delete("/element", userAuth, async (req, res) => {
-  const parsedData = DeleteElementSchema.safeParse(req.body);
-
-  if (!parsedData.success) {
-    res.status(400).json({
-      message: "Invalid Input",
-    });
-    return;
-  }
-
-  const spaceElement = await client.spaceElement.findUnique({
-    where: {
-      id: parsedData.data.id
-    }, 
-    include: {
-      space: true
-    }
-  });
-
-  if(!spaceElement){
-    res.status(400).json({
-      message: "Element Does not exist",
-    });
-    return;
-  }
-
-  if(spaceElement.space.creatorId !== req.userId){
-    res.status(403).json({
-      message: "UnAuthorized",
-    });
-    return;
-  }
-
-  await client.spaceElement.delete({
-    where: {
-        id: parsedData.data.id
-    }
-  });
-
-  res.json({
-    message: "Element deleted"
-  });
-  return;
-});

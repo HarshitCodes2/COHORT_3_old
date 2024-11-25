@@ -17,7 +17,7 @@ export const UpdateUserMetadata = z.object({
 
 export const CreateSpaceSchema = z.object({
   name: z.string(),
-  dimensions: z.string().regex(/^[0-9]{1,4}x[0-9]{1,4}$/),
+  dimensions: z.string().regex(/^[0-9]{1,4}x[0-9]{1,4}$/).optional(),
   mapId: z.string().optional(),
 });
 

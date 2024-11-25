@@ -44,14 +44,28 @@ rootRouter.post("/signup", async (req, res) => {
 rootRouter.post("/signin", async (req, res) => {
   const parsedData = UserSignInSchema.safeParse(req.body);
 
+  if(!parsedData.success){
+    res.status(400).json({
+      message: "Invalid Input"
+    });
+    return;
+  }
+
   try {
     const user = await client.user.findFirst({
       where: {
-        username: parsedData.data?.username,
+        username: parsedData.data.username,
       },
     });
 
-    if (parsedData.data?.password && user?.password) {
+    if(!user){
+      res.status(400).json({
+        message: "User not found"
+      });
+      return;
+    }
+
+    if (parsedData.data.password && user.password) {
       const passwordMatch = bcrypt.compareSync(
         parsedData.data.password,
         user.password
