@@ -3,9 +3,6 @@ import { User } from "./User";
 import jwt from "jsonwebtoken";
 
 if (process.env.WS_PORT) {
-  console.log("PORT : ---------------", process.env.WS_PORT);
-  console.log("JWT ------------------------", process.env.JWT_SECRET);
-  
   const wss = new WebSocketServer({ port: parseInt(process.env.WS_PORT) });
 
   wss.on("connection", (ws) => {
